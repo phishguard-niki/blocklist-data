@@ -1,113 +1,29 @@
 {
-  "total_domains": 2509780,
-  "shards": {
-    "other": {
-      "file": "shard-other.json",
-      "count": 148245
-    },
-    "a": {
-      "file": "shard-a.json",
-      "count": 203119
-    },
-    "b": {
-      "file": "shard-b.json",
-      "count": 146422
-    },
-    "c": {
-      "file": "shard-c.json",
-      "count": 175960
-    },
-    "d": {
-      "file": "shard-d.json",
-      "count": 105463
-    },
-    "e": {
-      "file": "shard-e.json",
-      "count": 95970
-    },
-    "f": {
-      "file": "shard-f.json",
-      "count": 88097
-    },
-    "g": {
-      "file": "shard-g.json",
-      "count": 88312
-    },
-    "h": {
-      "file": "shard-h.json",
-      "count": 85302
-    },
-    "i": {
-      "file": "shard-i.json",
-      "count": 68863
-    },
-    "j": {
-      "file": "shard-j.json",
-      "count": 34382
-    },
-    "k": {
-      "file": "shard-k.json",
-      "count": 62225
-    },
-    "l": {
-      "file": "shard-l.json",
-      "count": 70382
-    },
-    "m": {
-      "file": "shard-m.json",
-      "count": 144379
-    },
-    "n": {
-      "file": "shard-n.json",
-      "count": 57952
-    },
-    "o": {
-      "file": "shard-o.json",
-      "count": 62735
-    },
-    "p": {
-      "file": "shard-p.json",
-      "count": 132340
-    },
-    "q": {
-      "file": "shard-q.json",
-      "count": 20266
-    },
-    "r": {
-      "file": "shard-r.json",
-      "count": 77241
-    },
-    "s": {
-      "file": "shard-s.json",
-      "count": 200320
-    },
-    "t": {
-      "file": "shard-t.json",
-      "count": 135673
-    },
-    "u": {
-      "file": "shard-u.json",
-      "count": 41676
-    },
-    "v": {
-      "file": "shard-v.json",
-      "count": 58059
-    },
-    "w": {
-      "file": "shard-w.json",
-      "count": 82883
-    },
-    "x": {
-      "file": "shard-x.json",
-      "count": 61509
-    },
-    "y": {
-      "file": "shard-y.json",
-      "count": 32417
-    },
-    "z": {
-      "file": "shard-z.json",
-      "count": 29588
-    }
-  }
+  "a": "shard-a.json",
+  "b": "shard-b.json",
+  "c": "shard-c.json",
+  "d": "shard-d.json",
+  "e": "shard-e.json",
+  "f": "shard-f.json",
+  "g": "shard-g.json",
+  "h": "shard-h.json",
+  "i": "shard-i.json",
+  "j": "shard-j.json",
+  "k": "shard-k.json",
+  "l": "shard-l.json",
+  "m": "shard-m.json",
+  "n": "shard-n.json",
+  "o": "shard-o.json",
+  "p": "shard-p.json",
+  "q": "shard-q.json",
+  "r": "shard-r.json",
+  "s": "shard-s.json",
+  "t": "shard-t.json",
+  "u": "shard-u.json",
+  "v": "shard-v.json",
+  "w": "shard-w.json",
+  "x": "shard-x.json",
+  "y": "shard-y.json",
+  "z": "shard-z.json",
+  "other": "shard-other.json"
 }
