@@ -1,0 +1,99 @@
+name: Update Blocklist
+
+on:
+  schedule:
+    # Every day at 22:00 UTC = 06:00 Asia/Taipei
+    - cron: '0 22 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout blocklist-data
+        uses: actions/checkout@v4
+
+      - name: Checkout updater scripts
+        uses: actions/checkout@v4
+        with:
+          repository: phishguard-niki/Phishguard
+          path: updater
+          sparse-checkout: |
+            anti-scam-extension-v042-auto
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run blocklist update
+        run: |
+          cd updater/anti-scam-extension-v042-auto
+
+          # Create output directories
+          mkdir -p ../../data ../../data/blocklist-shards
+
+          # Ensure config files exist
+          touch config/local-seeds.txt
+          mkdir -p config/global
+          for f in scamadviser-highrisk.txt crypto-exchange-scam.txt spamhaus-dbl.txt; do
+            [ -f "config/global/$f" ] || echo "" > "config/global/$f"
+          done
+          for f in fca-scam.json asic-scam.json sfc-scam.json otx-scam.json; do
+            [ -f "config/global/$f" ] || echo '{"domains":[]}' > "config/global/$f"
+          done
+
+          # Step 1: Fetch global regulatory feeds
+          echo "[1/3] Fetching global regulatory feeds..."
+          node scripts/fetch_global_feeds.js || echo "[WARN] Some feeds failed (continuing)"
+
+          # Step 2: Run main updater
+          echo "[2/3] Running auto_update_v2.js..."
+          SHARDS_DIR="../../data/blocklist-shards"
+          OUT_FILE="../../data/blocklist.json"
+          mkdir -p "$SHARDS_DIR"
+
+          node auto_update_v2.js \
+            --sources config/sources.json \
+            --out "$OUT_FILE" \
+            --keywords config/keywords.txt \
+            --urlhaus_only_online \
+            --phishstats_min_score 5 \
+            --shards_dir "$SHARDS_DIR" \
+            --shards 27 || true
+
+          # Step 3: Verify
+          echo "[3/3] Verifying..."
+          if [ -f "$OUT_FILE" ]; then
+            DOMAIN_COUNT=$(node -e "const j=JSON.parse(require('fs').readFileSync('$OUT_FILE','utf8')); console.log(j.phishing_domains.length)")
+            echo "Domains: $DOMAIN_COUNT"
+          else
+            echo "ERROR: blocklist.json not created"
+            exit 1
+          fi
+
+      - name: Copy shards to repo root
+        run: |
+          # Copy shard files to repo root for publishing
+          cp -r data/blocklist-shards/* ./ 2>/dev/null || true
+          # Also keep them in data/ for reference
+          echo "Shard files copied"
+
+      - name: Commit and push
+        run: |
+          git config user.name "PhishGuard Bot"
+          git config user.email "phishguard-niki@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-update blocklist $(date -u +%Y-%m-%d)"
+            git push
+          fi
