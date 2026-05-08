@@ -93,6 +93,8 @@ jobs:
         run: |
           git config user.name "PhishGuard Bot"
           git config user.email "phishguard-niki@users.noreply.github.com"
+          # Remove blocklist.json (>100MB, exceeds GitHub limit, not needed by users)
+          rm -f data/blocklist.json
           git add -A
           if git diff --cached --quiet; then
             echo "No changes to commit"
