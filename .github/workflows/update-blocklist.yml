@@ -13,13 +13,12 @@ jobs:
   update:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
     steps:
       - name: Checkout blocklist-data
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Checkout updater scripts
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: phishguard-niki/Phishguard
           path: updater
@@ -27,9 +26,9 @@ jobs:
             anti-scam-extension-v042-auto
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -62,7 +61,6 @@ jobs:
           SHARDS_DIR="../../data/blocklist-shards"
           OUT_FILE="../../data/blocklist.json"
           mkdir -p "$SHARDS_DIR"
-
           node auto_update_v2.js \
             --sources config/sources.json \
             --out "$OUT_FILE" \
@@ -93,8 +91,10 @@ jobs:
         run: |
           git config user.name "PhishGuard Bot"
           git config user.email "phishguard-niki@users.noreply.github.com"
+
           # Remove blocklist.json (>100MB, exceeds GitHub limit, not needed by users)
           rm -f data/blocklist.json
+
           git add -A
           if git diff --cached --quiet; then
             echo "No changes to commit"
